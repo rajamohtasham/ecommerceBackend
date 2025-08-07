@@ -1,14 +1,33 @@
+{% extends 'store/base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Product Detail</title>
-    <link rel="stylesheet" href="{% static 'store/style.css' %}">
-</head>
-<body>
-    <header><h1>Product Detail Page</h1></header>
-    <div class="container">
-        <p>Showing details for product with ID: {{ id }}</p>
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="product-detail">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300">
+        <div class="info">
+            <p><strong>Price:</strong> PKR {{ product.price }}</p>
+            <p><strong>Category:</strong> {{ product.category }}</p>
+            <p><strong>Description:</strong> {{ product.description }}</p>
+            <p><strong>In Stock:</strong> {{ product.stock }}</p>
+
+            <form method="post" action="{% url 'add_to_cart' product.id %}">
+                {% csrf_token %}
+                <label for="quantity"><strong>Quantity:</strong></label>
+                <input 
+                    type="number" 
+                    name="quantity" 
+                    id="quantity" 
+                    value="1" 
+                    min="1" 
+                    max="{{ product.stock }}" 
+                    required
+                >
+                <button type="submit" class="btn">Add to Cart</button>
+            </form>
+        </div>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
