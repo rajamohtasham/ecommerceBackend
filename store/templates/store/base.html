@@ -1,52 +1,166 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Brand{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'store/style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+<style>
+  
+    /* Navbar Base */
+    .navbar {
+        padding: 20px 40px;
+        border-bottom: 2px solid;
+        border-color: #ccc;
+    }
+
+    .container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1100px;
+        margin:0 auto;
+    }
+
+    .logo {
+        font-size: 2rem;    
+        font-weight: bold;
+        text-decoration: none;
+        color: #000;
+    }
+
+
+    .nav-links {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 23px;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        font-size: 1rem;
+    }
+
+    .nav-links a:hover {
+        color: #ff9800;
+    }
+
+    /* Logout button style */
+    .logout-btn {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font: inherit;
+    }
+
+    .logout-btn:hover {
+        color: #ff9800;
+    }
+
+    /* Toggle Button (hidden on large screens) */
+    .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+    }
+
+    /* Footer */
+    .footer {
+        text-align: center;
+        background-color: #333;
+        color: white;
+        padding: 20px 0;
+        margin-top: 40px;
+        font-size: 14px;
+    }
+
+    /* Responsive Menu */
+    @media (max-width: 768px) {
+        .menu-toggle {
+            display: block;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .nav-links {
+            position: absolute;
+            top: 70px;
+            right: 0;
+            width: 200px;
+            flex-direction: column;
+            gap: 25px;
+            color: #000;
+            padding: 30px;
+            border-radius: 0 0 10px 10px;
+            background-color: #fff;
+            /* Animation setup */
+            transform: translateX(100%);
+            /* Hidden to the right */
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.4s ease, opacity 0.4s ease;
+        }
+
+        .nav-links.show {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+    }
+</style>
+
 <body>
     <!-- Navbar -->
     <nav class="navbar">
         <div class="container">
-            <a href="{% url 'home' %}" class="logo"> OneGo</a>
-            <ul class="nav-links">
+            <a href="{% url 'home' %}" class="logo">One<span style="color:crimson">Go</span></a>
+
+            <!-- Toggle button for mobile -->
+            <button class="menu-toggle" id="menu-toggle">☰</button>
+
+            <ul class="nav-links" id="nav-links">
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'products' %}">Products</a></li>
                 <li><a href="{% url 'view_cart' %}">Cart 🛒</a></li>
 
                 {% if user.is_authenticated %}
-                    <li><a href="#">Hi, {{ user.username }}</a></li>
-                    <li>
-                        <form action="{% url 'logout' %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" style="background:none; border:none; color:white; cursor:pointer; font: inherit;">
-                                Logout
-                            </button>
-                        </form>
-                    </li>
+                <li><a href="#">Hi, {{ user.username }}</a></li>
+                <li>
+                    <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </li>
                 {% else %}
-                    <li><a href="{% url 'login' %}">Login</a></li>
-                    <li><a href="{% url 'register' %}">Register</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+                <li><a href="{% url 'register' %}">Register</a></li>
                 {% endif %}
 
                 {% if request.user.is_authenticated and request.user.is_staff %}
-                     <a href="{% url 'add_product' %}">Add Product</a>
+                <li><a href="{% url 'add_product' %}">Add Product</a></li>
                 {% endif %}
             </ul>
         </div>
     </nav>
 
+
     <!-- Flash Messages -->
     <div class="container">
         {% if messages %}
-            {% for message in messages %}
-                <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
-                    {{ message }}
-                </div>
-            {% endfor %}
+        {% for message in messages %}
+        <div class="alert {% if message.tags %}{{ message.tags }}{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
         {% endif %}
     </div>
 
@@ -58,9 +172,26 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
+        <div class="container2">
             <p>&copy; 2025 OneGo. All rights reserved.</p>
         </div>
     </footer>
+
+
+    <script>
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+
+        menuToggle.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
+            if (navLinks.classList.contains("show")) {
+                menuToggle.innerHTML = "✖"; // Change to close icon
+            } else {
+                menuToggle.innerHTML = "☰"; // Change back to menu icon
+            }
+        });
+
+    </script>
 </body>
+
 </html>

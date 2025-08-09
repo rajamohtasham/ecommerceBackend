@@ -4,7 +4,7 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="containerProduct">
     <div class="product-detail">
         <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300">
         <div class="info">
@@ -16,18 +16,64 @@
             <form method="post" action="{% url 'add_to_cart' product.id %}">
                 {% csrf_token %}
                 <label for="quantity"><strong>Quantity:</strong></label>
-                <input 
-                    type="number" 
-                    name="quantity" 
-                    id="quantity" 
-                    value="1" 
-                    min="1" 
-                    max="{{ product.stock }}" 
-                    required
-                >
+                <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}" required>
+                
                 <button type="submit" class="btn">Add to Cart</button>
             </form>
         </div>
     </div>
 </div>
+
+<style>
+    .containerProduct {
+        max-width: 800px;
+        margin: 30px auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .product-detail {
+        display: flex;
+        gap: 20px;
+    }
+
+    .product-detail img {
+        border-radius: 8px;
+    }
+
+    .info {
+        flex-grow: 1;
+    }
+
+    .btn {
+        background-color: #28a745;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn:hover {
+        background-color: #218838;
+    }
+    @media (max-width: 768px) {
+        .product-detail {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product-detail img {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .info {
+            text-align: center;
+        }
+        
+    }
+</style>
 {% endblock %}

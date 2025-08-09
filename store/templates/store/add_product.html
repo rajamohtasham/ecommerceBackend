@@ -1,91 +1,75 @@
 {% extends 'store/base.html' %}
 
 {% block content %}
-<div class="container">
-    <h2>Add New Product</h2>
+<div class="w-full flex items-center justify-center  px-4 py-12">
+    <div class="w-full max-w-2xl bg-white p-8 rounded-xl shadow-lg">
+        
+        <!-- Title -->
+        <h2 class="text-3xl font-bold text-gray-800 mb-6 text-center">Add New Product</h2>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
+        <!-- Success / Error Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="mb-4 px-4 py-2 rounded-lg text-white {% if message.tags == 'success' %}bg-green-500{% else %}bg-red-500{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+        <!-- Form -->
+        <form method="POST" enctype="multipart/form-data" class="space-y-5">
+            {% csrf_token %}
 
-        <div>
-            <label for="name">Product Name:</label>
-            <input type="text" name="name" id="name" required>
-        </div>
+            <!-- Product Name -->
+            <div>
+                <label for="name" class="block text-gray-700 font-medium mb-1">Product Name</label>
+                <input type="text" name="name" id="name" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-        <div>
-            <label for="price">Price:</label>
-            <input type="number" name="price" id="price" step="0.01" required>
-        </div>
+            <!-- Price -->
+            <div>
+                <label for="price" class="block text-gray-700 font-medium mb-1">Price</label>
+                <input type="number" name="price" id="price" step="0.01" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-        <div>
-            <label for="category">Category:</label>
-            <input type="text" name="category" id="category" required>
-        </div>
+            <!-- Category -->
+            <div>
+                <label for="category" class="block text-gray-700 font-medium mb-1">Category</label>
+                <input type="text" name="category" id="category" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-        <div>
-            <label for="stock">Stock:</label>
-            <input type="number" name="stock" id="stock" required>
-        </div>
+            <!-- Stock -->
+            <div>
+                <label for="stock" class="block text-gray-700 font-medium mb-1">Stock</label>
+                <input type="number" name="stock" id="stock" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
 
-        <div>
-            <label for="description">Description:</label>
-            <textarea name="description" id="description" required></textarea>
-        </div>
+            <!-- Description -->
+            <div>
+                <label for="description" class="block text-gray-700 font-medium mb-1">Description</label>
+                <textarea name="description" id="description" rows="4" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            </div>
 
-        <div>
-            <label for="image">Product Image:</label>
-            <input type="file" name="image" id="image" required>
-        </div>
+            <!-- Image -->
+            <div>
+                <label for="image" class="block text-gray-700 font-medium mb-1">Product Image</label>
+                <input type="file" name="image" id="image" required
+                    class="w-full border border-gray-300 rounded-lg px-4 py-2 file:mr-4 file:py-2 file:px-4
+                           file:rounded-lg file:border-0 file:text-sm file:font-semibold
+                           file:bg-blue-600 file:text-white hover:file:bg-blue-700">
+            </div>
 
-        <button type="submit">Add Product</button>
-    </form>
+            <!-- Submit Button -->
+            <button type="submit" 
+                class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                Add Product
+            </button>
+        </form>
+    </div>
 </div>
-
-<style>
-    .container {
-        max-width: 500px;
-        margin: 30px auto;
-        background-color: #f9f9f9;
-        padding: 25px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    label {
-        font-weight: bold;
-        display: block;
-        margin-top: 15px;
-    }
-
-    input, textarea {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-
-    button {
-        margin-top: 20px;
-        padding: 10px 15px;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
-    }
-
-    .alert {
-        background-color: #d4edda;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #c3e6cb;
-        border-radius: 4px;
-    }
-</style>
 {% endblock %}

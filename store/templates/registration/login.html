@@ -1,19 +1,81 @@
 {% extends 'store/base.html' %}
 
 {% block content %}
-    <div class="container">
-        <h2>Login</h2>
-        
+<div class="w-full flex items-center justify-center px-4 py-3">
+    <div class="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
+
+        <!-- Page Title -->
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Login</h2>
+
+        <!-- Error Message -->
         {% if form.errors %}
-            <p style="color: red;">Invalid username or password.</p>
+        <div class="bg-red-100 text-red-700 px-4 py-2 rounded-lg mb-4 text-sm">
+            Invalid username or password.
+        </div>
         {% endif %}
 
-        <form method="post" class="form">
+        <!-- Login Form -->
+        <form method="post" class="space-y-4">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn">Login</button>
+
+            {% for field in form %}
+            <div>
+                <label class="block text-gray-700 font-medium mb-1">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <p class="text-red-600 text-sm mt-1">{{ field.errors|striptags }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit"
+                class="w-full bg-blue-600 text-white py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+                Login
+            </button>
         </form>
 
-        <p>Don't have an account? <a href="{% url 'register' %}">Register here</a>.</p>
+        <!-- Register Link -->
+        <p class="mt-6 text-center text-gray-600">
+            Don't have an account?
+            <a href="{% url 'register' %}" class="text-blue-600 hover:underline">
+                Register here
+            </a>.
+        </p>
     </div>
+</div>
+<style>
+      form {
+    max-width: 400px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  form input,
+  form select,
+  form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+  }
+
+  form button {
+    width: 100%;
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  form button:hover {
+    background-color: #218838;
+  } 
+
+</style>
 {% endblock %}

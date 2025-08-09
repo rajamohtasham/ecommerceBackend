@@ -4,43 +4,65 @@
 {% block title %}All Products{% endblock %}
 
 {% block content %}
-<h2>All Products</h2>
+<div class="max-w-5xl mx-auto px-4 py-10 ">
 
-<form method="get" action="{% url 'products' %}" class="search-form">
-    <input type="text" name="q" placeholder="Search by name or category">
-    <button type="submit">Search</button>
-</form>
+    <!-- Page Title -->
+    <h2 class="text-3xl font-bold mb-6 text-gray-800 text-center">All Products</h2>
 
-<div class="product-grid">
-    {% for product in products %}
-        <div class="product-card">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            <h2>{{ product.name }}</h2>
-            <p class="price">PKR {{ product.price }}</p>
-            <a href="{% url 'product_detail' product.id %}" class="btn">View Details</a>
+    <!-- Search Form -->
+    <div class="w-full max-w-md mx-auto mb-8">
+        <form method="get" action="{% url 'products' %}" class="flex items-center gap-2 mb-8">
+            <input type="text" name="q" placeholder="Search by name or category"
+                class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="submit"
+                class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                Search
+            </button>
+        </form>
+    </div>
+
+    <!-- Products Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 flex justify-center items-center">
+        {% for product in products %}
+        <div class="  bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-48 object-cover">
+            <div class="p-4 flex flex-col justify-between h-full">
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-800 mb-2">{{ product.name }}</h2>
+                    <p class="text-blue-600 font-bold mb-4">PKR {{ product.price }}</p>
+                </div>
+                <button class="">
+                    <a href="{% url 'product_detail' product.id %}" class="bg-blue-600 text-white px-3 py-2 
+                        text-sm rounded-sm hover:bg-blue-700 transition-colors w-full text-center">
+                        View Details
+                    </a>
+                </button>
+            </div>
         </div>
-    {% empty %}
-        <p>No products found.</p>
-    {% endfor %}
+        {% empty %}
+        <p class="col-span-full text-center text-gray-500">No products found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex justify-end mt-10">
+        <div class="flex items-center gap-2 text-sm">
+            {% if products.has_previous %}
+            <a href="?page=1" class="px-3 py-1 border rounded hover:bg-gray-100">&laquo; First</a>
+            <a href="?page={{ products.previous_page_number }}"
+                class="px-3 py-1 border rounded hover:bg-gray-100">Previous</a>
+            {% endif %}
+
+            <span class="px-3 py-1 border rounded bg-blue-600 text-white">
+                Page {{ products.number }} of {{ products.paginator.num_pages }}
+            </span>
+
+            {% if products.has_next %}
+            <a href="?page={{ products.next_page_number }}" class="px-3 py-1 border rounded hover:bg-gray-100">Next</a>
+            <a href="?page={{ products.paginator.num_pages }}" class="px-3 py-1 border rounded hover:bg-gray-100">Last
+                &raquo;</a>
+            {% endif %}
+        </div>
+    </div>
 </div>
-
-<!-- ✅ Pagination block (moved outside the loop) -->
-<div class="pagination">
-    <span class="step-links">
-        {% if products.has_previous %}
-            <a href="?page=1">&laquo; First</a>
-            <a href="?page={{ products.previous_page_number }}">Previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ products.number }} of {{ products.paginator.num_pages }}
-        </span>
-
-        {% if products.has_next %}
-            <a href="?page={{ products.next_page_number }}">Next</a>
-            <a href="?page={{ products.paginator.num_pages }}">Last &raquo;</a>
-        {% endif %}
-    </span>
-</div>
-
 {% endblock %}
