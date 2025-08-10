@@ -4,14 +4,84 @@
 {% block title %}Checkout{% endblock %}
 
 {% block content %}
-<h2>Checkout</h2>
-<form method="POST">
-    {% csrf_token %}
-    <ul>
-        {% for item in cart_items %}
-            <li>{{ item.product.name }} ({{ item.quantity }}) - Rs. {{ item.product.price }}</li>
-        {% endfor %}
-    </ul>
-    <button type="submit" class="btn">Place Order</button>
-</form>
+<div class="checkout-container">
+    <h2>🛒 Checkout</h2>
+
+    {% if cart_items %}
+        <table class="checkout-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>Rs. {{ item.product.price }}</td>
+                        <td>Rs. {{ item.total }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="checkout-summary">
+            <p><strong>Grand Total:</strong> Rs. {{ total_price }}</p>
+        </div>
+
+        <form method="POST" class="checkout-form">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-primary">✅ Place Order</button>
+        </form>
+    {% else %}
+        <p>Your cart is empty. <a href="{% url 'products' %}">Continue shopping</a>.</p>
+    {% endif %}
+</div>
+
+<style>
+.checkout-container {
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.checkout-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.checkout-table th, .checkout-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+.checkout-table th {
+    background-color: #f4f4f4;
+}
+
+.checkout-summary {
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: right;
+}
+
+.btn-primary {
+    background-color: #28a745;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btn-primary:hover {
+    background-color: #218838;
+}
+</style>
 {% endblock %}

@@ -22,7 +22,7 @@ def products(request):
         product_list = product_list.filter(
             name__icontains=query) | product_list.filter(category__icontains=query)
 
-    paginator = Paginator(product_list, 6)  # Show 6 products per page
+    paginator = Paginator(product_list, 8)  # Show 8 products per page
     page = request.GET.get('page')
     products = paginator.get_page(page)
 
